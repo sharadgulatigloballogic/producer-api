@@ -28,6 +28,15 @@ public class UserController {
         return ResponseEntity.ok(userService.getActiveUsers());
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<User>> searchUsers(@RequestParam(required = false) String q,
+                                                  @RequestParam(required = false) Boolean active) {
+        if (q == null || q.isBlank()) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(userService.searchUsers(q, active));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         return userService.getUserById(id)
