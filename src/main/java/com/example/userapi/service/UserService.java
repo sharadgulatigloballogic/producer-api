@@ -45,6 +45,23 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    public List<User> searchUsers(String q, Boolean active) {
+        if (q == null || q.isBlank()) {
+            return new ArrayList<>();
+        }
+        String needle = q.toLowerCase();
+        return users.values().stream()
+                .filter(u -> active == null || u.isActive() == active)
+                .filter(u -> contains(u.getUsername(), needle)
+                        || contains(u.getEmail(), needle)
+                        || contains(u.getFullName(), needle))
+                .collect(Collectors.toList());
+    }
+
+    private boolean contains(String field, String needle) {
+        return field != null && field.toLowerCase().contains(needle);
+    }
+
     public User updateUser(Long id, User updatedUser) {
         User existing = users.get(id);
         if (existing == null) {

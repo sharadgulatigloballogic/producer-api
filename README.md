@@ -23,6 +23,14 @@ GET /api/users
 GET /api/users/active
 ```
 
+### Search Users
+```bash
+GET /api/users/search?q={text}&active={true|false}
+```
+`q` is required (400 if missing or blank). It is matched as a case-insensitive substring
+against `username`, `email` and `fullName`. `active` is optional and filters results when present.
+Returns `200` with a JSON list, or `[]` if nothing matches.
+
 ### Get User by ID
 ```bash
 GET /api/users/{id}
@@ -80,6 +88,12 @@ curl http://localhost:8080/api/users
 
 # Get user by ID
 curl http://localhost:8080/api/users/1
+
+# Search users (case-insensitive match on username, email or full name)
+curl "http://localhost:8080/api/users/search?q=john"
+
+# Search only inactive users
+curl "http://localhost:8080/api/users/search?q=doe&active=false"
 
 # Create a new user
 curl -X POST http://localhost:8080/api/users \
